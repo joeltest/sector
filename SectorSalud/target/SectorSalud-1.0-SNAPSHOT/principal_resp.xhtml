@@ -1,0 +1,322 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <body>
+
+        <ui:composition template="./WEB-INF/templates/template.xhtml">
+
+            <ui:define name="header">
+                <h:form>
+                    <p:inputText placeholder="Buscar.." styleClass="col-sm-2">                                        
+                    </p:inputText>
+                    <p:commandLink styleClass="btn btn-default glyphicon glyphicon-search"/> 
+                    <p:commandLink value="Subir" 
+                                   onclick="PF('popupSubirArchivo').show();"
+                                   styleClass="btn btn-success glyphicon glyphicon-cloud-upload"/>                                        
+                    <p:commandLink value="Nueva carpeta" 
+                                   onclick="PF('popupCrearCarpeta').show();"                                                       
+                                   styleClass="btn btn-default glyphicon glyphicon-folder-open"/>
+                    <!--<p:commandLink styleClass="glyphicon glyphicon-cog glyphicon "/>-->
+                    <p:commandLink value="Administrar sistema "
+                                   rendered="#{sesion.usuarioSesion.tipoUsuario.id eq 1}"
+                                   action="administrar.xhtml"
+                                   styleClass="glyphicon glyphicon-cog glyphicon "/>
+
+
+                </h:form> 
+            </ui:define>
+
+            <ui:define name="left">
+                <h:form id="formArbol" prependId="true">
+                    <p:growl id="msgs" showDetail="true" escape="false"/>
+                    <h3 >Categorias</h3>
+                    <p:tree id="treeNode" value="#{arbolBean.root}" 
+                            var="elemento"
+                            selectionMode="single"
+                            dynamic="true"
+                            cache="false"      
+                            selection="#{arbolBean.nodoSeleccionado}">
+
+                        <p:ajax event="select" update="@this,:formContenido"
+                                process="@this,:formContenido,:formCrearFolder,:formSubirArchivo"
+                                listener="#{arbolBean.vizualizarContenidoCarpetaPadre}" />
+
+                        <p:treeNode expandedIcon="ui-icon-folder-open" icon="ui-icon-document">
+                            <h:outputText value="#{elemento.nombre}"/>
+                        </p:treeNode>
+
+                    </p:tree>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="formContenido">                     
+                    <ui:fragment rendered="#{arbolBean.elementoSeleccionado.esCarpeta eq 'True'}">
+                        <p:dataGrid var="elemento" value="#{arbolBean.listaElemento}"
+                                    columns="3" layout="grid"
+                                    rows="12" 
+                                    paginator="false" 
+                                    emptyMessage="No exsiten archivos..."
+                                    id="data"
+                                    >
+                            <p:panel  style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <ui:fragment rendered="#{elemento.esCarpeta eq 'False'}">
+                                        <ui:fragment rendered="#{elemento.tipoArchivo eq 'image/jpeg'}">
+                                            <img src="http://localhost:8080/SArchivo/AbrirImage?URL=#{elemento.ruta}&amp;TYPE=#{elemento.tipoArchivo}"
+                                                 height="128px" 
+                                                 width="128px">                                        
+                                            </img>                                    
+                                        </ui:fragment>
+                                        <ui:include src="imgTipoArchivo.xhtml">
+                                            <ui:param name="paramElemento" value="#{elemento}"/>
+                                        </ui:include>
+
+                                    </ui:fragment>
+
+                                    <ui:fragment rendered="#{elemento.esCarpeta eq 'True'}">
+                                        <p:graphicImage value="http://icons.iconarchive.com/icons/acidrums4/betelgeuse/96/Places-folder-blue-icon.png"
+                                                        >
+                                        </p:graphicImage>
+                                    </ui:fragment>
+                                    <p:commandLink title="#{elemento.nombre}"
+                                                   value="#{elemento.nombre} "
+                                                   actionListener="#{arbolBean.cargarElementoParaDetalle(elemento)}"
+                                                   process="@this" 
+                                                   update="@form,:formCrearFolder,:formSubirArchivo"
+                                                   >    
+                                    </p:commandLink>
+
+                                    <div class="row">
+                                        <!-- Split button -->
+                                        <div class="col col-md-6">
+
+                                        </div>
+                                        <div class="col col-md-6">
+                                            <!--  link de comparte con -->
+                                        </div>
+                                    </div>
+                                </h:panelGrid>
+                            </p:panel>
+                        </p:dataGrid>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{arbolBean.elementoSeleccionado.esCarpeta eq 'False'}">  
+                        <div class="row">
+                            <!--<div class="col-sm-1">                                
+                                <img src="http://icons.iconarchive.com/icons/franksouza183/fs/24/Places-folder-blue-icon.png"/>                                
+                            </div>-->
+                            <div class="col-sm-11">                                
+                                <p:commandLink value="#{arbolBean.carpetaSeleccionada.ruta}"
+                                               styleClass="h5"
+                                               />
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col col-md-2">
+
+                                <h:panelGrid>
+                                    Compartido con..
+                                    <p:commandButton value="Compartir con.."
+                                                     actionListener="#{arbolBean.iniciarCompartirCon(event)}"
+                                                     update=":formCompartir"
+                                                     process="@this,:formCompartir"
+                                                     oncomplete="PF('popupCompartir').show();"/>
+                                    <!-- Area de compartiodos-->
+                                    <ui:repeat value="#{arbolBean.listaUsuarioCompartidos}"
+                                               var="data">
+                                        <div class="card">
+                                            <h5><span class="label label-success">#{data.usuario.nombre}</span>
+                                                <p:commandLink value="x" styleClass="label label-danger"
+                                                               actionListener="#{arbolBean.quitarCompartir(data.id)}"
+                                                               update="@form"
+                                                               process="@this"
+                                                               >
+                                                </p:commandLink>
+                                            </h5>                                           
+
+                                        </div>
+                                    </ui:repeat>
+
+                                </h:panelGrid>
+
+
+                            </div>
+                            <div class="col col-md-8">
+                                <div class="panel panel-body">
+                                    <div class="row text-center">
+                                        <ui:fragment rendered="#{arbolBean.elementoSeleccionado.tipoArchivo eq 'image/jpeg'}">
+                                            <img src="http://localhost:8080/SArchivo/AbrirImage?URL=#{arbolBean.elementoSeleccionado.ruta}&amp;TYPE=#{arbolBean.elementoSeleccionado.tipoArchivo}"
+                                                 >                                        
+                                            </img>                                    
+                                        </ui:fragment>
+                                        <ui:include src="imgTipoArchivo.xhtml">
+                                            <ui:param name="paramElemento" value="#{arbolBean.elementoSeleccionado}"/>
+                                        </ui:include>                                       
+                                    </div>
+                                    <div class="row text-center">
+
+                                        <h2><span class="label label-info"> #{arbolBean.elementoSeleccionado.nombre}</span></h2>
+
+                                    </div>
+                                    <div class="row text-center">
+                                        <p:commandButton value="Descargar" 
+                                                         ajax="false"                                                          
+                                                         icon="ui-icon-arrowthick-1-s">
+                                            <p:fileDownload  value="#{arbolBean.file}" />
+                                        </p:commandButton>
+
+                                        <p:commandButton  
+                                            value="Eliminar"
+                                            actionListener="#{arbolBean.eliminarArchivo(event)}"
+                                            process="@this"
+                                            update="@form"
+
+                                            >
+                                        </p:commandButton>
+
+
+                                    </div>                                                               
+                                </div>
+                            </div>
+                            <div class="col col-md-2">
+                                <h:outputLabel value="creado :"/>                                        
+                                <h:outputText value="#{arbolBean.elementoSeleccionado.fechaGenero}" styleClass="label label-info">
+                                    <f:convertDateTime type="date" dateStyle="short"/>
+                                </h:outputText>
+                                - 
+                                <h:outputText value="#{arbolBean.elementoSeleccionado.horaGenero}" styleClass="label label-info">
+                                    <f:convertDateTime type="time" dateStyle="short"/>
+                                </h:outputText>                            
+                                <h:outputLabel value="/ Tipo :"/>                                                                    
+                                <h:outputText value="#{arbolBean.elementoSeleccionado.tipoArchivo}" styleClass="label label-info"/>
+                            </div>
+                        </div>
+                    </ui:fragment>
+                </h:form>
+
+                <h:form enctype="multipart/form-data" id="formSubirArchivo">
+                    <p:growl id="messages" showDetail="true" />
+                    <p:dialog header="Subir Archivo al folder (#{arbolBean.carpetaSeleccionada.nombre})" 
+                              widgetVar="popupSubirArchivo" 
+                              modal="true"
+                              resizable="false"
+                              draggable="false"
+                              minHeight="40">
+                        <span>Agregar archivo a la carpeta <span class="label label-success"> #{arbolBean.carpetaSeleccionada.nombre}</span></span>
+
+                        <p:fileUpload fileUploadListener="#{arbolBean.uploadAttachment}" 
+                                      mode="advanced" 
+                                      dragDropSupport="false"
+                                      uploadLabel="Subir" 
+                                      cancelLabel="Cancelar" 
+                                      label="Seleccionar.."  
+                                      process=":formContenido,:formArbol"
+                                      update="messages,:formContenido,:formArbol" 
+                                      sizeLimit="1000000" 
+                                      invalidFileMessage="El archivo es invalido..."
+                                      invalidSizeMessage="El archivo es muy pesado.."
+                                      previewWidth="200"
+                                      allowTypes="/(\.|\/)(doc|docx|xls|xlsx|pdf|gif|jpe?g|png)$/" />
+
+                        <br/>
+                        <div class="row text-center">                            
+                            <p:commandButton  
+                                process=":formContenido,:formArbol"
+                                update=":formContenido,:formArbol"
+                                onclick="PF('popupSubirArchivo').hide();"
+                                value="Cerrar"/>
+                        </div>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="formCrearFolder">
+                    <p:growl id="messages" showDetail="true" />
+                    <p:dialog header="Agregar folder a (#{arbolBean.carpetaSeleccionada.nombre})" 
+                              widgetVar="popupCrearCarpeta" 
+                              modal="true"
+                              resizable="false"
+                              draggable="false"
+                              minHeight="40">
+                        <span>Carpeta : <span class="label label-success">#{arbolBean.carpetaSeleccionada.ruta}</span></span>
+                        <p:inputText placeholder="Nombre de la carpeta.."
+                                     value="#{arbolBean.nombreFolder}"
+                                     required="true"
+                                     styleClass="form-control"
+                                     requiredMessage="Escribe el nombre del folder.."
+                                     />
+                        <br/>
+                        <div class="row text-center">                            
+                            <p:commandButton  
+                                process="@form,:formContenido,:formArbol"
+                                update=":formContenido,:formArbol"
+                                actionListener="#{arbolBean.crearFolder(event)}"
+                                oncomplete="PF('popupCrearCarpeta').hide();"
+                                value="Crear carpeta"/>
+
+                            <p:commandButton  
+                                process=":formContenido,:formArbol"
+                                update=":formContenido,:formArbol"
+                                onclick="PF('popupCrearCarpeta').hide();"
+                                value="Cancelar"/>
+                        </div>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="formCompartir">
+                    <p:growl id="messages" showDetail="true" />
+                    <p:dialog header="Compartir (#{arbolBean.elementoSeleccionado.nombre})" 
+                              widgetVar="popupCompartir" 
+                              modal="true"
+                              resizable="false"
+                              draggable="false"
+                              minHeight="40">
+                        <span>Compartir con :</span>
+                        <h:panelGrid>
+                            <p:selectOneMenu id="compartirSelectOneMenu" 
+                                             value="#{arbolBean.idUsuarioCompartir}" 
+                                             >
+                                <f:selectItems value="#{arbolBean.listaUsuarioCompartirItems}"/>
+                                <p:ajax process="@this"
+                                        update="@this"
+                                        event="change"/>
+
+                            </p:selectOneMenu>
+
+                            <p:inputTextarea value="#{arbolBean.comentario}"
+                                             rows="5"
+                                             cols="60"/>
+
+
+                        </h:panelGrid>
+                        <div class="row text-center">                            
+                            <p:commandLink value="Compartir"
+                                           styleClass="btn btn-primary btn-lg"
+                                           actionListener="#{arbolBean.compartirElemento(event)}"
+                                           update=":formContenido"                                           
+                                           process="@this,:formContenido"
+                                           oncomplete="PF('popupCompartir').hide();"
+                                           />     
+                            <p:commandLink  
+                                process="@form,:formContenido,:formArbol"
+                                styleClass="btn btn-default btn-lg"
+                                update=":formContenido,:formArbol"
+                                onclick="PF('popupCompartir').hide();"
+                                value="Cerrar.."/>
+
+                        </div>
+                    </p:dialog>
+                </h:form>
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
