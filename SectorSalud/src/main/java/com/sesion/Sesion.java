@@ -11,12 +11,12 @@ import com.sector.modelo.Usuario;
 import com.sector.servicios.UsuarioFacadeLocal;
 import com.sector.utils.MensajeUtils;
 import com.sector.utils.UtilsRedirect;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
 import javax.faces.event.ActionEvent;
+import javax.inject.Named;
 
 /**
  *
@@ -25,6 +25,7 @@ import javax.faces.event.ActionEvent;
 @Named(value = "sesion")
 @SessionScoped
 public class Sesion implements Serializable {
+    
     @EJB
     private UsuarioFacadeLocal usuarioService;
            
@@ -35,14 +36,11 @@ public class Sesion implements Serializable {
     public Sesion() {
         
     }
-    @PostConstruct
-    public void init(){
-//        usuarioSesion = usuarioFacadeLocal.find(1);
-        
-    }
+
     
     public void login(ActionEvent event){
-        this.setUsuarioSesion(usuarioService.login(usuarioTemp, claveTemp, 1));
+        System.out.println("Login "+usuarioTemp+" "+claveTemp);
+        this.usuarioSesion = usuarioService.login(usuarioTemp, claveTemp, 1);
         if(getUsuarioSesion() == null){
               MensajeUtils.addErrorMessage("Acceso denegado", "el usuario o la clave son incorrectos...");
         }else{
@@ -52,7 +50,7 @@ public class Sesion implements Serializable {
     }
     
    public void redireccionarPrincipal(ActionEvent event){
-        UtilsRedirect.redireccionarContexto("/SArchivo");
+        UtilsRedirect.redireccionarContexto("/SectorSalud");
    }
    
 
@@ -74,7 +72,6 @@ public class Sesion implements Serializable {
         this.setUsuarioSesion(null);
         this.claveTemp="";
         this.usuarioTemp = "";
-//        Util.redireccionarContexto("/Restaurant-web");
     }
 
     /**

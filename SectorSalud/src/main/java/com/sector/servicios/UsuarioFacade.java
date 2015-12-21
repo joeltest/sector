@@ -31,6 +31,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
     @Override
     public Usuario login(String correo, String clave, Integer idSucursal) {
+
         Usuario usuario = em.createNamedQuery("Usuario.login",Usuario.class)
                 .setParameter("correo", correo)
                 .setParameter("clave", clave)

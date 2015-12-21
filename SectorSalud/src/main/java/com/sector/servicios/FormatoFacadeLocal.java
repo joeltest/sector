@@ -34,4 +34,6 @@ public interface FormatoFacadeLocal {
     
     long obtenerContadorFormatos(int estatus,int idUsuario);
     
+     List<Formato>  obtenerFormatosPorGerencia(int idGerenicia);
+    
 }
