@@ -10,9 +10,21 @@
 
         <ui:composition >
 
-            <h:form id="contenido">               
+            <h:form id="contenidoAdministrador">               
                 <p:messages showSummary="true" showDetail="false" showIcon="true" closable="true"/>
-                <p:dataTable var="data" value="#{formatoBean.listaFormato}" rows="10"
+                <h:outputLabel value="Seleccione la gerencia: "/>
+                <p:selectOneMenu value="#{gerenciaBean.idGerenciaSeleccionado}"
+                                 valueChangeListener="#{gerenciaBean.valueChangeGerencia}"
+                                 >
+                    <f:ajax execute="@form" render="@form"/>
+                    <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
+                    <f:selectItems value="#{gerenciaBean.listaGerenciaItems}"
+                                   />
+                </p:selectOneMenu>
+                
+                <p:dataTable var="data" 
+                             value="#{gerenciaBean.listaFormato}"
+                             rows="10"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="5,10,15">
@@ -68,7 +80,7 @@
             </h:form>
 
 
-            <h:form id="formCrudAdministrador">
+            <h:form id="formCrudAdmin">
                 <p:growl id="messages" showDetail="true" />
                 <p:dialog header="Capturar formato para envio" 
                           widgetVar="popupCrud" 
@@ -104,14 +116,14 @@
                         <p:commandLink value="Guardar"
                                        actionListener="#{formatoBean.guardarRegistroFormato(event)}"
                                        styleClass="btn btn-primary btn-lg"
-                                       update=":contenido"                                           
-                                       process="@form,:contenido"
+                                       update=":contenidoAdministrador"                                           
+                                       process="@form,:contenidoAdministrador"
                                        oncomplete="PF('popupCrud').hide();"
                                        />     
                         <p:commandLink  
                             process="@form"
                             styleClass="btn btn-default btn-lg"
-                            update=":contenido"
+                            update=":contenidoAdministrador"
                             onclick="PF('popupCrud').hide();"
                             value="Cancelar"/>
 

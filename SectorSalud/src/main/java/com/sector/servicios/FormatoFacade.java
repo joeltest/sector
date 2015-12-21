@@ -46,4 +46,12 @@ public class FormatoFacade extends AbstractFacade<Formato> implements FormatoFac
                 .getSingleResult();
     }
     
+    @Override
+    public List<Formato>  obtenerFormatosPorGerencia(int idGerenicia) {
+         return (List<Formato>) em.createQuery("SELECT f FROM Formato f WHERE f.gerenciaAprueba.id = "+idGerenicia
+                + " AND f.adjunto.esRepositorio = 'True'"
+                + " AND f.eliminado = 'False'")
+                .getResultList();
+    }
+    
 }

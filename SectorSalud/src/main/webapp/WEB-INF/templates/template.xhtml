@@ -142,8 +142,8 @@
             ]]>
         </style>
 
-        <ui:fragment rendered="#{empty sesion.usuarioSesion}">
-            <ui:include src="login.xhtml"/>
+        <ui:fragment rendered="#{empty sesion.usuarioSesion}" >
+            <ui:include src="noticias.xhtml"/>
         </ui:fragment>
         <ui:fragment rendered="#{not empty sesion.usuarioSesion}">
 
@@ -173,8 +173,8 @@
                                         <p:commandLink value="(Salir)"
                                                        actionListener="#{sesion.cerrarSesion(event)}"
                                                        immediate="true"
-                                                       update="@all"
-                                                       process="@this"/>
+                                                       ajax="false"
+                                                       />
                                     </h:form>
 
                                 </div>
