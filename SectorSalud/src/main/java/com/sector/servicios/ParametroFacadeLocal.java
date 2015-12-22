@@ -23,6 +23,8 @@ public interface ParametroFacadeLocal {
     void remove(Parametro parametro);
 
     Parametro find(Object id);
+    
+    Parametro findActivo();
 
     List<Parametro> findAll();
 

@@ -9,13 +9,13 @@ package com.sector.constantes;
  *
  * @author jorodriguez
  */
-public enum tipo_usuario {
+public enum OperacionesEnum {
     
-    ADMINISTRADOR(3),
-    GERENTE(2),
-    EMPLEADO(1);
+    INSERTAR(1),
+    MODIFICAR(2),
+    ELIMINAR(3);
 
-    private tipo_usuario(int id) {
+    private OperacionesEnum(int id) {
         this.id = id;
     }
     

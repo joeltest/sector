@@ -33,5 +33,7 @@ public interface UsuarioFacadeLocal {
     
     Usuario login(String correo,String clave,Integer idSucursal);
     
+    List<Usuario> listaGerentes(int idSucursal);
+    
     
 }

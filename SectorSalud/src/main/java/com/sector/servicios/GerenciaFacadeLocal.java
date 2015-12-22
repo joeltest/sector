@@ -25,6 +25,8 @@ public interface GerenciaFacadeLocal {
     Gerencia find(Object id);
 
     List<Gerencia> findAll();
+    
+    List<Gerencia> findAllGerencias(int idSucursal);
 
     List<Gerencia> findRange(int[] range);
 

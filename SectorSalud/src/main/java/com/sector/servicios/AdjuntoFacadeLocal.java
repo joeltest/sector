@@ -30,4 +30,6 @@ public interface AdjuntoFacadeLocal {
 
     int count();
     
+    
+    
 }

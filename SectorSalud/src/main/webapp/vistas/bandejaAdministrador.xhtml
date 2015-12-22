@@ -18,26 +18,26 @@
                                 <ul class="nav nav-tabs" id="myTab">
                                     <div class="liner"></div>
                                     <li class="active">
-                                        <a href="#entrada" data-toggle="tab" title="Formatos de entrada">
+                                        <a href="#entrada" data-toggle="tab" title="Administrar formatos a gerencias..">
                                             <span class="round-tabs one">
                                                 <i class="glyphicon glyphicon-save-file"></i>
                                             </span> 
                                         </a></li>
 
-                                    <li><a href="#revisados" data-toggle="tab" title="Formatos Revisados">
+                                    <li><a href="#revisados" data-toggle="tab" title="Administrar gerencias...">
                                             <span class="round-tabs two">
                                                 <i class="glyphicon glyphicon-eye-open"></i>
                                             </span> 
                                         </a>
                                     </li>
 
-                                    <li><a href="#aceptados" data-toggle="tab" title="Formatos Aceptados">
+                                    <li><a href="#aceptados" data-toggle="tab" title="ddddd">
                                             <span class="round-tabs five">
                                                 <i class="glyphicon glyphicon-ok"></i>
                                             </span> </a>
                                     </li>
 
-                                    <li><a href="#historial" data-toggle="tab" title="Historial">
+                                    <li><a href="#historial" data-toggle="tab" title=".....">
                                             <span class="round-tabs three">
                                                 <i class="glyphicon glyphicon-calendar"></i>
                                             </span> </a>
@@ -55,20 +55,13 @@
 
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="entrada">
-
                                     <h3 class="head text-center">Departamentos<sup>™</sup> <span style="color:#f48260;">♥</span></h3>
                                     <!-- Lista de gerencias con gerentes y formatos -->
-                                    <ui:include src="../composiciones/bandejaAdministradorComposicion.xhtml"/>
+                                    <ui:include src="../composiciones/gerenciaFormatoComposicion.xhtml"/>
                                 </div>
                                 <div class="tab-pane fade" id="revisados">
-                                    <h3 class="head text-center">Formatos revisados<sup>™</sup> Profile</h3>
-                                    <p class="narrow text-center">
-                                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                                    </p>
-
-                                    <p class="text-center">
-                                        <a href="" class="btn btn-success btn-outline-rounded green"> create your profile <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-                                    </p>
+                                    <h3 class="head text-center">Administrar gerencias</h3>
+                                    <ui:include src="../composiciones/gerenciaUsuarioComposicion.xhtml"/>
 
                                 </div>
                                 <div class="tab-pane fade" id="aceptados">

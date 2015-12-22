@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class ParametroFacade extends AbstractFacade<Parametro> implements ParametroFacadeLocal {
+
     @PersistenceContext(unitName = "sArcvhivoPU")
     private EntityManager em;
 
@@ -27,5 +28,15 @@ public class ParametroFacade extends AbstractFacade<Parametro> implements Parame
     public ParametroFacade() {
         super(Parametro.class);
     }
-    
+
+    @Override
+    public Parametro findActivo() {
+        //
+        return (Parametro) em.createNamedQuery("Parametro.findByActivo")
+                .setParameter("activo", "True")
+                .setMaxResults(1)
+                .getSingleResult();
+
+    }
+
 }

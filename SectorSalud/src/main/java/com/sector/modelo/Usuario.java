@@ -61,8 +61,9 @@ public class Usuario implements Serializable {
     @Size(max = 5)
     @Column(name = "ELIMINADO")
     private String eliminado;
-    @Column(name = "APELLIDOS")
-    private Integer apellidos;
+    @Size(max = 300)
+    @Column(name = "APELLIDOS")    
+    private String apellidos;
     @Size(max = 50)
     @Column(name = "CORREO")
     private String correo;
@@ -120,13 +121,6 @@ public class Usuario implements Serializable {
         this.eliminado = eliminado;
     }
 
-    public Integer getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(Integer apellidos) {
-        this.apellidos = apellidos;
-    }
 
     public String getCorreo() {
         return correo;
@@ -236,6 +230,14 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "com.sector.modelo.Usuario[ id=" + id + " ]";
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
     
 }

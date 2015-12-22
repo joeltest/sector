@@ -5,7 +5,9 @@
  */
 package com.sector.servicios;
 
+import com.sector.constantes.TipoUsuarioEnum;
 import com.sector.modelo.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,6 +40,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
                 .getSingleResult();
         
         return usuario;
+    }
+
+    @Override
+    public List<Usuario> listaGerentes(int idSucursal) {
+        
+        return em.createQuery("SELECT u FROM Usuario u WHERE u.eliminado = 'False' AND u.tipoUsuario.id = "+TipoUsuarioEnum.GERENTE.getId())
+                .getResultList();
+        
+                
     }
 
 }

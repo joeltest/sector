@@ -6,6 +6,7 @@
 package com.sector.servicios;
 
 import com.sector.modelo.Gerencia;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,6 +27,14 @@ public class GerenciaFacade extends AbstractFacade<Gerencia> implements Gerencia
 
     public GerenciaFacade() {
         super(Gerencia.class);
+    }
+
+    @Override
+    public List<Gerencia> findAllGerencias(int idSucursal) {
+        return getEntityManager()
+                .createQuery("SELECT o FROM Gerencia o WHERE o.sucursal.id="+idSucursal+" AND o.eliminado = 'False'")
+                .getResultList();
+        
     }
     
 }

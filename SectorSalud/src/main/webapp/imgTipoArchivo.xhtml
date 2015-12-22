@@ -11,20 +11,20 @@
         <ui:composition>
             
             <ui:fragment rendered="#{paramElemento.tipoArchivo eq 'application/pdf'}">
-                <img src="http://icons.iconarchive.com/icons/hopstarter/soft-scraps/128/Adobe-PDF-Document-icon.png"
+                <img src="http://icons.iconarchive.com/icons/hopstarter/soft-scraps/32/Adobe-PDF-Document-icon.png"
                      >                                        
                 </img>   
             </ui:fragment>
             <ui:fragment rendered="#{paramElemento.tipoArchivo eq 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}">
-                <img src="http://icons.iconarchive.com/icons/treetog/file-type/128/docx-win-icon.png"
+                <img src="http://icons.iconarchive.com/icons/treetog/file-type/32/docx-win-icon.png"
                      >                                        
                 </img>   
             </ui:fragment>
-            <!--<ui:fragment rendered="#{paramElemento ne 'image/jpeg'}">
-                <img src="http://icons.iconarchive.com/icons/hopstarter/sleek-xp-basic/128/Document-Blank-icon.png"
-                     >                                        
-                </img>                                   
-            </ui:fragment>-->
+            <ui:fragment rendered="#{paramElemento eq 'image/jpeg'}">
+                <img src="/SectorSalud/AbrirImage?URL=#{paramElemento.ruta}&amp;TYPE=#{paramElemento.tipoArchivo}"
+                       >                                       
+                </img>  
+            </ui:fragment>            
         </ui:composition>
 
     </body>
