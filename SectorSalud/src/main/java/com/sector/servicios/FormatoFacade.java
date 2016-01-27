@@ -17,6 +17,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class FormatoFacade extends AbstractFacade<Formato> implements FormatoFacadeLocal {
+
     @PersistenceContext(unitName = "sArcvhivoPU")
     private EntityManager em;
 
@@ -30,28 +31,36 @@ public class FormatoFacade extends AbstractFacade<Formato> implements FormatoFac
     }
 
     @Override
-    public List<Formato> obteberListaFormatos(int estatus,int idUsuario) {
-        
-        return (List<Formato>) em.createQuery("SELECT f FROM Formato f WHERE f.usuarioGenero.id = "+idUsuario
-                + " AND f.estatus.id = "+estatus
+    public List<Formato> obteberListaFormatos(int estatus, int idUsuario) {
+
+        return (List<Formato>) em.createQuery("SELECT f FROM Formato f WHERE f.usuarioGenero.id = " + idUsuario
+                + " AND f.estatus.id = " + estatus
                 + " AND f.eliminado = 'False'")
                 .getResultList();
     }
 
     @Override
     public long obtenerContadorFormatos(int estatus, int idUsuario) {
-         return (long) em.createQuery("SELECT COUNT(f) FROM Formato f WHERE f.usuarioGenero.id = "+idUsuario
-                + " AND f.estatus.id = "+estatus
+        return (long) em.createQuery("SELECT COUNT(f) FROM Formato f WHERE f.usuarioGenero.id = " + idUsuario
+                + " AND f.estatus.id = " + estatus
                 + " AND f.eliminado = 'False'")
                 .getSingleResult();
     }
-    
+
     @Override
-    public List<Formato>  obtenerFormatosPorGerencia(int idGerenicia) {
-         return (List<Formato>) em.createQuery("SELECT f FROM Formato f WHERE f.gerenciaAprueba.id = "+idGerenicia
+    public List<Formato> obtenerFormatosPorGerencia(int idGerenicia) {
+        return (List<Formato>) em.createQuery("SELECT f FROM Formato f WHERE f.gerenciaAprueba.id = " + idGerenicia
                 + " AND f.adjunto.esRepositorio = 'True'"
                 + " AND f.eliminado = 'False'")
                 .getResultList();
     }
-    
+
+    @Override
+    public List<Formato> obtenerFormatosParaValidacion(int estatus, int idUsuario) {
+        return (List<Formato>) em.createQuery("SELECT f FROM Formato f WHERE f.usuarioAprueba.id = " + idUsuario
+                + " AND f.estatus.id = " + estatus
+                + " AND f.eliminado = 'False'")
+                .getResultList();
+    }
+
 }

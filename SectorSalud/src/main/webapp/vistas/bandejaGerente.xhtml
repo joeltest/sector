@@ -57,34 +57,75 @@
                                 <div class="tab-pane fade in active" id="entrada">
 
                                     <h3 class="head text-center">Formatos de entrada<sup>™</sup> <span style="color:#f48260;">♥</span></h3>
-                                    <p class="narrow text-center">
-                                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                                    </p>
+                                    <h:form id="contenidoFormatosEntrada">               
 
-                                    <p class="text-center">
-                                        <a href="" class="btn btn-success btn-outline-rounded green"> start using bootsnipp <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-                                    </p>
+                                        <ui:decorate template="../composiciones/composicionListaFormatos.xhtml">
+                                            <ui:param name="listaFormatoParam" value="#{formatoValidacionBean.listaFormatoEntrada}"/>
+
+                                            <ui:define name="columnas">
+                                                <p:column>
+                                                    <p:commandLink value="Autorizar"
+                                                                   styleClass="btn btn-success"
+                                                                   >
+
+                                                    </p:commandLink>
+                                                </p:column>
+                                                <p:column>
+                                                    <p:commandLink value="Cancelar"
+                                                                   styleClass="btn btn-success"
+                                                                   >
+
+                                                    </p:commandLink>
+                                                </p:column>
+                                                <p:column>
+                                                    <p:commandLink value="Devolver"
+                                                                   styleClass="btn btn-success"
+                                                                   >
+
+                                                    </p:commandLink>
+                                                </p:column>
+                                            </ui:define>
+                                        </ui:decorate>
+                                    </h:form>
                                 </div>
                                 <div class="tab-pane fade" id="revisados">
-                                    <h3 class="head text-center">Formatos revisados<sup>™</sup> Profile</h3>
-                                    <p class="narrow text-center">
-                                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                                    </p>
+                                    <h3 class="head text-center">Formatos Devueltos</h3>
+                                   <h:form id="contenidoFormatosDevueltos">               
 
-                                    <p class="text-center">
-                                        <a href="" class="btn btn-success btn-outline-rounded green"> create your profile <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-                                    </p>
+                                        <ui:decorate template="../composiciones/composicionListaFormatos.xhtml">
+                                            <ui:param name="listaFormatoParam" value="#{formatoValidacionBean.listaFormatoEntrada}"/>
+
+                                            <ui:define name="columnas">
+                                                <p:column>
+                                                    <p:commandLink value="Ver detalle"
+                                                                   styleClass="btn btn-success"
+                                                                   >
+
+                                                    </p:commandLink>
+                                                </p:column>                                                
+                                            </ui:define>
+                                        </ui:decorate>
+                                    </h:form>
 
                                 </div>
                                 <div class="tab-pane fade" id="aceptados">
                                     <h3 class="head text-center">Aceptados</h3>
-                                    <p class="narrow text-center">
-                                        Lorem ipsum dolor sit amet, his ea mollis fabellas principes. Quo mazim facilis tincidunt ut, utinam saperet facilisi an vim.
-                                    </p>
+                                    <h:form id="contenidoFormatosAceptados">               
 
-                                    <p class="text-center">
-                                        <a href="" class="btn btn-success btn-outline-rounded green"> start using bootsnipp <span style="margin-left:10px;" class="glyphicon glyphicon-send"></span></a>
-                                    </p>
+                                        <ui:decorate template="../composiciones/composicionListaFormatos.xhtml">
+                                            <ui:param name="listaFormatoParam" value="#{formatoValidacionBean.listaFormatoAceptados}"/>
+
+                                            <ui:define name="columnas">                                                
+                                                <p:column>
+                                                    <p:commandLink value="Ver Detalle"
+                                                                   styleClass="btn btn-success"
+                                                                   >
+
+                                                    </p:commandLink>
+                                                </p:column>
+                                            </ui:define>
+                                        </ui:decorate>
+                                    </h:form>
                                 </div>
                                 <div class="tab-pane fade" id="historial">
                                     <h3 class="head text-center">Historial</h3>
