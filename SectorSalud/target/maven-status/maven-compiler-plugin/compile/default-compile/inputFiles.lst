@@ -30,6 +30,7 @@ C:\github\sector\SectorSalud\src\main\java\com\sector\modelo\UsuarioRol.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\utils\UtilsRedirect.java
 C:\github\sector\SectorSalud\src\main\java\com\sesion\Sesion.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\utils\MensajeUtils.java
+C:\github\sector\SectorSalud\src\main\java\mail\EnviarMail.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\dto\ElementoDto.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\servicios\FormatoFacade.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\servicios\ParametroFacade.java
@@ -41,6 +42,7 @@ C:\github\sector\SectorSalud\src\main\java\com\sector\modelo\Sucursal.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\servicios\TipoUsuarioFacadeLocal.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\servicios\ComentarioAvisoSucursalFacade.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\servicios\GerenciaFormatoFacade.java
+C:\github\sector\SectorSalud\src\main\java\mail\SesionMail.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\beans\GerenciaResponsableBean.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\servicios\AdjuntoFacade.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\beans\FormatoRequestBean.java
@@ -50,10 +52,12 @@ C:\github\sector\SectorSalud\src\main\java\com\sector\modelo\TipoUsuario.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\constantes\TipoUsuarioEnum.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\modelo\GerenciaFormato.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\utils\EstatusEnum.java
+C:\github\sector\SectorSalud\src\main\java\mail\Constantes.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\servicios\RolFacade.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\modelo\Estatus.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\beans\PopupSubirArchivo.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\modelo\Rol.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\modelo\Parametro.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\servicios\AvisoSucursalFacadeLocal.java
+C:\github\sector\SectorSalud\src\main\java\com\sector\beans\SendMail.java
 C:\github\sector\SectorSalud\src\main\java\com\sector\modelo\Adjunto.java

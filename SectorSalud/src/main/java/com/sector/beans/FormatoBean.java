@@ -9,6 +9,7 @@ import com.sector.modelo.Adjunto;
 import com.sector.modelo.Estatus;
 import com.sector.modelo.Formato;
 import com.sector.modelo.Gerencia;
+import com.sector.servicios.AdjuntoFacadeLocal;
 import com.sector.servicios.FormatoFacadeLocal;
 import com.sector.servicios.GerenciaFacadeLocal;
 import com.sector.utils.EstatusEnum;
@@ -44,6 +45,8 @@ public class FormatoBean implements Serializable {
     private FormatoFacadeLocal formatoService;
     @EJB
     private GerenciaFacadeLocal gerenciaService;
+    @EJB
+    private AdjuntoFacadeLocal adjuntoService;
 
     private List<Formato> listaFormato;
     private Formato elementoSeleccionado;
@@ -76,7 +79,39 @@ public class FormatoBean implements Serializable {
         cargarGerenciasCombo();
 
     }
+    
+    public void preparaAdjuntarArchivo(ActionEvent ev){
+        System.out.println("Preparar nuevo formato");
+         int idFormato = Integer.parseInt(FacesUtils.getRequestParameter("idFormato"));
+        System.out.println("id formato");
+        this.elementoSeleccionado = formatoService.find(idFormato);
+        
+    }
 
+    public void guardarAdjunto(){
+        adjuntoService.create(adjunto);
+         elementoSeleccionado.setAdjunto(adjunto);
+        formatoService.edit(elementoSeleccionado);
+        cargarLista();
+    }
+    
+    public void enviar(ActionEvent e){
+        int idFormato = Integer.parseInt(FacesUtils.getRequestParameter("idFormato"));
+        
+        this.elementoSeleccionado = formatoService.find(idFormato);
+        
+        elementoSeleccionado.setEstatus(new Estatus(EstatusEnum.ENVIADO_PARA_VALIDACION.getId()));
+        elementoSeleccionado.setFechaEnvio(new Date());
+        elementoSeleccionado.setHoraEnvio(new Date());               
+        formatoService.edit(elementoSeleccionado);
+        SendMail.enviarCorreoEnvioFormatoValidacion(elementoSeleccionado);
+        cargarLista();
+        //enviar por correo
+        FacesUtils.addInfoMessage("Se envio el formato para su validación "+elementoSeleccionado.getGerenciaAprueba().getNombre()+" "+elementoSeleccionado.getUsuarioAprueba().getNombre());
+        
+    }
+    
+    
     public void guardarRegistroFormato(ActionEvent event) {
 
         Gerencia gerencia = gerenciaService.find(idGerenciaSeleccionado);
@@ -140,21 +175,22 @@ public class FormatoBean implements Serializable {
         System.out.println("uploadAttachment para la carpeta");
         try {
             UploadedFile file = event.getFile();
-            adjunto = new Adjunto();
-            adjunto.setNombre(file.getFileName());
-            adjunto.setTipoArchivo(file.getContentType());
+            this.adjunto = new Adjunto();
+            getAdjunto().setNombre(file.getFileName());
+            getAdjunto().setTipoArchivo(file.getContentType());
 //            adjunto.setPeso(String.valueOf(file.getSize()));
-            adjunto.setEliminado("False");
-            adjunto.setFechaGenero(new Date());
-            adjunto.setHoraGenero(new Date());
-            adjunto.setEsRepositorio("False");
-            adjunto.setGenero(sesion.getUsuarioSesion());
-            adjunto.setSistema("False");
+            getAdjunto().setEliminado("False");
+            getAdjunto().setFechaGenero(new Date());
+            getAdjunto().setHoraGenero(new Date());
+            getAdjunto().setEsRepositorio("False");
+            getAdjunto().setGenero(sesion.getUsuarioSesion());
+            getAdjunto().setSistema("False");
 
             String rutaCarpeta = crearFolder();
 
-            adjunto.setRuta(rutaCarpeta + "\\" + file.getFileName());
-            copyFile(adjunto.getRuta(), event.getFile().getInputstream());
+            getAdjunto().setRuta(rutaCarpeta + "\\" + file.getFileName());
+            copyFile(getAdjunto().getRuta(), event.getFile().getInputstream());
+            
             FacesUtils.addInfoMessage("Se adjunto el formato...");
             System.out.println("Se copio");
         } catch (IOException ex) {
@@ -404,6 +440,14 @@ public class FormatoBean implements Serializable {
 
     public void setIdGerenciaSeleccionado(Integer idGerenciaSeleccionado) {
         this.idGerenciaSeleccionado = idGerenciaSeleccionado;
+    }
+
+    public Adjunto getAdjunto() {
+        return adjunto;
+    }
+
+    public void setAdjunto(Adjunto adjunto) {
+        this.adjunto = adjunto;
     }
 
 }

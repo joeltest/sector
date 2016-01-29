@@ -10,7 +10,8 @@
 
         <ui:composition >
 
-            <h:form id="contenido">               
+            <h:form id="contenido"> 
+                capturista
                 <p:messages showSummary="true" showDetail="false" showIcon="true" closable="true"/>
                 <p:dataTable var="data" value="#{formatoBean.listaFormato}" rows="10"
                              paginator="true"
@@ -22,12 +23,17 @@
                             <span class="glyphicon glyphicon-upload"></span>
                             <p:commandLink value="Adjuntar formato.."
                                            styleClass="label label-info"
+                                           actionListener="#{formatoBean.preparaAdjuntarArchivo(ev)}"
+                                           oncomplete="PF('popupAddFormato').show();"
+                                           update=":formFormato"
                                            title="Clic aquí para adjuntar un archivo de formato...">
-
+                                <f:param name="idFormato" value="#{data.id}"/>
                             </p:commandLink>
                         </ui:fragment>
                         <ui:fragment rendered="#{not empty data.adjunto}">
                             <ui:include src="../imgTipoArchivo.xhtml"/>
+                            <h:commandLink value="quitar"></h:commandLink>
+                            
                         </ui:fragment>
                     </p:column>
 
@@ -60,9 +66,12 @@
                     <p:column >
                         <p:commandLink value="Enviar>>"
                                        styleClass="btn btn-success"
+                                       actionListener="#{formatoBean.enviar(e)}"
+                                       rendered="#{not empty data.adjunto}"
+                                       ajax="false"
                                        >
-
-                        </p:commandLink>
+                            <f:param name="idFormato" value="#{data.id}"/>
+                        </p:commandLink> 
                     </p:column>
                 </p:dataTable>
             </h:form>
@@ -113,6 +122,60 @@
                             styleClass="btn btn-default btn-lg"
                             update=":contenido"
                             onclick="PF('popupCrud').hide();"
+                            value="Cancelar"/>
+
+                    </div>
+                </p:dialog>
+            </h:form>
+
+
+            <h:form enctype="multipart/form-data"  id="formFormato">
+                <p:growl id="messagesUp" showDetail="true" />
+                <p:dialog header="Capturar formato para enviar" 
+                          widgetVar="popupAddFormato" 
+                          modal="true"
+                          resizable="false"
+                          draggable="false"
+                          minHeight="40">
+                    <span>Adjuntar Formato para el registro #{formatoBean.elementoSeleccionado.id}</span>
+                    <h:panelGrid>
+
+                        <ui:fragment rendered="#{empty formatoBean.elementoSeleccionado.adjunto}">
+                            <h:outputLabel value="Formato"/>                        
+                            <p:fileUpload fileUploadListener="#{formatoBean.uploadAttachment}" 
+                                          mode="advanced" 
+                                          dragDropSupport="false"
+                                          uploadLabel="Subir" 
+                                          cancelLabel="Cancelar" 
+                                          label="Seleccionar.."  
+                                          process=":contenido"
+                                          update="messagesUp,:contenido" 
+                                          sizeLimit="1000000" 
+                                          invalidFileMessage="El archivo es invalido..."
+                                          invalidSizeMessage="El archivo es muy pesado.."
+                                          previewWidth="300"
+                                          allowTypes="/(\.|\/)(doc|docx|xls|xlsx|pdf|gif|jpe?g|png)$/" />
+
+                        </ui:fragment>
+                        <ui:fragment rendered="#{not empty formatoBean.elementoSeleccionado.adjunto}">
+                            <ui:include src="../imgTipoArchivo.xhtml">
+                                <ui:param name="paramElemento" value="#{formatoBean.elementoSeleccionado.adjunto}"/>
+                            </ui:include>
+                        </ui:fragment>
+                    </h:panelGrid>
+                    <div class="row text-center">                            
+                        <p:commandLink value="Guardar"
+                                       actionListener="#{formatoBean.guardarAdjunto()}"
+                                       styleClass="btn btn-primary btn-lg"
+                                       update=":contenido"                                           
+                                       process="@form,:contenido"
+                                       oncomplete="PF('popupAddFormato').hide();"
+                                       />     
+                        <p:commandLink  
+                            process="@form"
+                            styleClass="btn btn-default btn-lg"
+                            update=":contenidoGerenciaUsuario"
+                            onclick="PF('popupAddFormato').hide();"
                             value="Cancelar"/>
 
                     </div>

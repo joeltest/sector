@@ -29,10 +29,12 @@
                                     <p:commandLink value="Capturar nuevo formato"
                                                    process="@this"
                                                    actionListener="#{formatoBean.preprarNuevo(event)}"
-                                                   update=":formCrudFormato"
+                                                   update=":formCrudAdministrador"
                                                    styleClass="btn btn-danger navbar-btn"
                                                    oncomplete="PF('popupCrud').show();"
-                                                   />
+                                                   >
+                                       
+                                    </p:commandLink>
                                 </h:form>
                             </div>
                             <ul class="nav navbar-nav">
