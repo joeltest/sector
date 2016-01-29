@@ -25,7 +25,7 @@ public class FormatoRequestBean implements Serializable {
     private FormatoFacadeLocal formatoService;
     
     public long getTotalFormatosPendientes(){
-        return formatoService.obtenerContadorFormatos(EstatusEnum.PENDIENTE.getId(), sesion.getUsuarioSesion().getId());
+        return formatoService.obtenerContadorFormatos(EstatusEnum.CAPTURADO.getId(), sesion.getUsuarioSesion().getId());
     }
     
     public long getTotalFormatosDevueltos(){

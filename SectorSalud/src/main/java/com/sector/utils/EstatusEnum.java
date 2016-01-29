@@ -11,10 +11,14 @@ package com.sector.utils;
  */
 public enum EstatusEnum {
 
-    PENDIENTE(1),
-    DEVUELTO(2),
-    CANCELADO(3);
-
+    
+    CAPTURADO(1),    
+    ENVIADO_PARA_VALIDACION(2),
+    ACEPTADO(3),
+    DEVUELTO(4),    
+    CANCELADO(5);
+    
+    
     private final int id;
 
     private EstatusEnum(int id) {

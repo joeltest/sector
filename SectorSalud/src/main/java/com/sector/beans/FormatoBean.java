@@ -64,7 +64,7 @@ public class FormatoBean implements Serializable {
     }
 
     private void cargarLista() {
-        setListaFormato(formatoService.obteberListaFormatos(EstatusEnum.PENDIENTE.getId(), getSesion().getUsuarioSesion().getId()));
+        setListaFormato(formatoService.obteberListaFormatos(EstatusEnum.CAPTURADO.getId(), getSesion().getUsuarioSesion().getId()));
     }
 
     public void preprarNuevo(ActionEvent event) {
@@ -83,7 +83,7 @@ public class FormatoBean implements Serializable {
         elementoSeleccionado.setFechaGenero(new Date());
         elementoSeleccionado.setHoraGenero(new Date());
         elementoSeleccionado.setEliminado("False");
-        elementoSeleccionado.setEstatus(new Estatus(EstatusEnum.PENDIENTE.getId()));
+        elementoSeleccionado.setEstatus(new Estatus(EstatusEnum.CAPTURADO.getId()));
         elementoSeleccionado.setGerenciaAprueba(gerencia);
         elementoSeleccionado.setUsuarioAprueba(gerencia.getUsuarioGerente());
         elementoSeleccionado.setUsuarioGenero(sesion.getUsuarioSesion());

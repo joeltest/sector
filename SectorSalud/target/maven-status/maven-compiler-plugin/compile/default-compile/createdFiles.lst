@@ -58,6 +58,7 @@ com\sector\modelo\TipoUsuario_.class
 com\sector\constantes\OperacionesEnum.class
 com\sector\servicios\SucursalFacadeLocal.class
 com\sector\servicios\FormatoFacadeLocal.class
+com\sector\beans\FormatoValidacionBean.class
 com\sector\validador\TextoRequerido.class
 com\sector\modelo\Formato_.class
 com\sector\modelo\Rol_.class
