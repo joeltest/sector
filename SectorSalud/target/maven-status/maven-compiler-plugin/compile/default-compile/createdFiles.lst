@@ -12,6 +12,8 @@ com\sector\modelo\UsuarioRol.class
 com\sector\beans\AvisosBean.class
 com\sector\servicios\RolFacade.class
 com\sector\modelo\Sucursal.class
+com\sector\beans\SendMail.class
+mail\Constantes.class
 com\sector\dto\ElementoDto.class
 com\sector\beans\FormatoBean.class
 com\sector\servicios\UsuarioRolFacadeLocal.class
@@ -33,6 +35,7 @@ com\sesion\Sesion.class
 com\sector\modelo\Sucursal_.class
 com\sector\servicios\TipoUsuarioFacadeLocal.class
 com\sector\servicios\SucursalFacade.class
+mail\SesionMail.class
 com\sector\servicios\GerenciaFormatoFacadeLocal.class
 com\sector\utils\FacesUtils.class
 com\sector\servicios\FormatoFacade.class
@@ -44,6 +47,7 @@ com\sector\modelo\TipoUsuario.class
 com\sector\beans\PopupSubirArchivo.class
 com\sector\modelo\AvisoSucursal_.class
 com\sector\modelo\Usuario.class
+mail\EnviarMail.class
 com\sector\modelo\Adjunto_.class
 com\sector\servicios\AdjuntoFacade.class
 com\sector\beans\UsuarioBean.class

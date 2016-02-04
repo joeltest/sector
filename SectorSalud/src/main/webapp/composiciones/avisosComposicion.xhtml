@@ -144,8 +144,8 @@
                         <p:commandLink value="Guardar"
                                        actionListener="#{avisosBean.guardarNuevoComentario(event)}"
                                        styleClass="btn btn-primary btn-lg"
-                                       update=":contenido"                                           
-                                       process="@form,:contenidoAvisos"
+                                       ajax="false"
+                                       
                                        oncomplete="PF('popupComentario').hide();"
                                        />     
                         <p:commandLink  

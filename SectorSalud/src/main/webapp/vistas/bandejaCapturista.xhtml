@@ -9,251 +9,186 @@
     <body>
 
         <!-- <ui:composition template="./../WEB-INF/templates/template.xhtml">-->
-         <ui:composition>
+        <ui:composition>
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
 
-                <nav class="navbar navbar-default navbar-static-top" role="navigation">
-                    <div class="container">
-                        <!-- Brand and toggle get grouped for better mobile display -->
-                        <div class="navbar-header">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-
-                            </button>
-                        </div>
-                        <!-- Collect the nav links, forms, and other content for toggling -->
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <div class="btn-compose pull-left">
-                                <h:form>                                    
-                                    <p:commandLink value="Capturar nuevo formato"
-                                                   process="@this"
-                                                   actionListener="#{formatoBean.preprarNuevo(event)}"
-                                                   update=":formCrudAdministrador"
-                                                   styleClass="btn btn-danger navbar-btn"
-                                                   oncomplete="PF('popupCrud').show();"
-                                                   >
-                                       
-                                    </p:commandLink>
-                                </h:form>
-                            </div>
-                            <ul class="nav navbar-nav">
-                                <li>
-                                    <a href="#inbox" role="tab" data-toggle="tab">
-                                        Pendiente <span class="label label-success">10</span>
-                                    </a>
-                                </li>
-                                <li><a href="#sent-mail" role="tab" data-toggle="tab">Enviados</a>
-
-                                </li>
-                                <li><a href="#draft" role="tab" data-toggle="tab">Devueltos</a>
-
-                                </li>
-                                <li><a href="#trash" role="tab" data-toggle="tab">Descargar</a>
-
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- /.navbar-collapse -->
+                        </button>
                     </div>
-                    <!-- /.container-fluid -->
-                </nav>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <div class="btn-compose pull-left">
+                            <h:form>                                    
+                                <p:commandLink value="Capturar nuevo formato"
+                                               process="@this"
+                                               actionListener="#{formatoBean.preprarNuevo(event)}"
+                                               update=":formCrudAdministrador"
+                                               styleClass="btn btn-primary navbar-btn"
+                                               oncomplete="PF('popupCrud').show();"
+                                               >
 
-                <div class="tab-content">
-                    <div class="tab-pane active" id="inbox">
-                        <div class="container">
-                            <div class="content-container clearfix">
-                                <div class="col-md-12">
-                                    <h1 class="content-title">Formatos pendientes de envio</h1>
-
-                                    <!--<input type="search" placeholder="Search Mail" class="form-control mail-search" />
-                                    -->
-                                    <ui:include src="../composiciones/bandejaCapturistaComposicion.xhtml"/>
-                                </div>
-                            </div>
+                                </p:commandLink>
+                            </h:form>
                         </div>
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="#inbox" role="tab" data-toggle="tab">
+                                    Pendiente <span class="label label-info">#{not empty formatoBean.listaFormato ? formatoBean.listaFormato.size():'0'}</span>
+                                </a>
+                            </li>
+                            <li><a href="#sent-mail" role="tab" data-toggle="tab">
+                                    Enviados<span class="label label-danger">#{not empty formatoBean.listaFormatosEnviados ? formatoBean.listaFormatosEnviados.size():'0'}</span>
+                                </a>
+
+                            </li>
+                            <li><a href="#draft" role="tab" data-toggle="tab">
+                                    Devueltos<span class="label label-danger">#{not empty formatoBean.listaFormatoDevueltos ? formatoBean.listaFormatoDevueltos.size():'0'}</span>
+                                </a>
+
+                            </li>
+                            <li><a href="#trash" role="tab" data-toggle="tab">Descargar</a>
+
+                            </li>
+                        </ul>
                     </div>
-                    <div class="tab-pane" id="compose">
+                    <!-- /.navbar-collapse -->
+                </div>
+                <!-- /.container-fluid -->
+            </nav>
 
-                        <div class="container">
-                            <div class="content-container clearfix">
-                                <h1 class="content-title">Compose</h1>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input id="tokenfield" type="text" class="form-control" placeholder="To" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Cc" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Bcc" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Subject" />
-                                    </div>
-                                    <textarea class="form-control" placeholder="message"></textarea>
-                                    <div class="btn-send">
-                                        <button class="btn btn-success btn-lg"><span class="glyphicon glyphicon-send"></span> Send</button>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="tab-content">
+                <div class="tab-pane active" id="inbox">
+                    <div class="content-container clearfix">
+                        <div class="col-md-12">
+                            <h1 class="content-title">Formatos pendientes de envio</h1>
+
+                            <!--<input type="search" placeholder="Search Mail" class="form-control mail-search" />
+                            -->
+                            <ui:include src="../composiciones/bandejaCapturistaComposicion.xhtml"/>
                         </div>
-
-                    </div>
-                    <div class="tab-pane" id="sent-mail">
-
-                        <div class="container">
-                            <div class="content-container clearfix">
-                                <div class="col-md-12">
-                                    <h1 class="content-title">Sent Mail</h1>
-
-                                    <input type="search" placeholder="Search Mail" class="form-control mail-search" />
-
-                                    <ul class="mail-list">
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">You have ten more subscriptions click her...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane" id="draft">
-
-                        <div class="container">
-                            <div class="content-container clearfix">
-                                <div class="col-md-12">
-                                    <h1 class="content-title">Draft</h1>
-
-                                    <input type="search" placeholder="Search Mail" class="form-control mail-search" />
-
-                                    <ul class="mail-list">
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">You have ten more subscriptions click her...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane" id="trash">
-
-                        <div class="container">
-                            <div class="content-container clearfix">
-                                <div class="col-md-12">
-                                    <h1 class="content-title">Trash</h1>
-
-                                    <input type="search" placeholder="Search Mail" class="form-control mail-search" />
-
-                                    <ul class="mail-list">
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">You have ten more subscriptions click her...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="">
-                                                <span class="mail-sender">You Tube</span>
-                                                <span class="mail-subject">New subscribers!</span>
-                                                <span class="mail-message-preview">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil eveniet ipsum nisi? Eaque odio quae debitis saepe explicabo alias sit tenetur animi...</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
+                <div class="tab-pane" id="compose">
+
+                    <div class="content-container clearfix">
+                        <h1 class="content-title">Compose</h1>
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="sent-mail">
+
+                    <div class="content-container clearfix">
+                        <div class="col-md-12">
+                            <h1 class="content-title">Formatos Enviados par Autorización</h1>
+                            <ui:include src="../composiciones/listaSoloLectura.xhtml">
+                                <ui:param name="listaParam" value="#{formatoBean.listaFormatosEnviados}"/>
+                            </ui:include>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="draft">
+
+                    <div class="content-container clearfix">
+                        <div class="col-md-12">
+                            <h1 class="content-title">Formatos Devueltos/Cancelados</h1>
+                            <ui:include src="../composiciones/listaSoloLectura.xhtml">
+                                <ui:param name="listaParam" value="#{formatoBean.listaFormatoDevueltos}"/>
+                            </ui:include>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="trash">
+
+                    <div class="content-container clearfix">
+                        <div class="col-md-12">
+                            <h1 class="content-title">Descargar archivos de Gerencias</h1>
+                           
+                            <h:form>               
+                                <p:messages showSummary="true" showDetail="false" showIcon="true" closable="true"/>
+                                <h:outputLabel value="Seleccione la gerencia para mostrar formatos relacionados: "/>
+                                <br/>
+                                <p:selectOneMenu id="listaGerenciacCombo" 
+                                                 value="#{gerenciaBean.idGerenciaSeleccionado}"
+                                                 valueChangeListener="#{gerenciaBean.valueChangeGerencia}"                                 
+                                                 styleClass="col-4"
+                                                 >
+                                    <p:ajax update="@form"
+                                            process="@this"
+                                            />
+                                    <f:selectItem itemLabel="Seleccione..." itemValue="-1"/>
+                                    <f:selectItems value="#{gerenciaBean.listaGerenciaItems}"
+                                                   />
+                                </p:selectOneMenu>
+                                <p:commandLink styleClass="glyphicon glyphicon-refresh"
+                                               action="#{gerenciaBean.cargarGerenciasCombo()}"
+                                               update="listaGerenciacCombo"
+                                               >
+
+                                </p:commandLink>
+
+                                <p:dataTable id="listaFormatos"
+                                             var="data" 
+                                             value="#{gerenciaBean.listaRelaciones}"
+                                             rows="10"
+                                             paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             emptyMessage="Sin registros de formatos"
+                                             rowsPerPageTemplate="5,10,15">
+
+                                    <p:column headerText="Formato">
+                                        <ui:fragment rendered="#{not empty data.adjunto}">
+                                            <div class="text-center">
+                                                <ui:include src="../imgTipoArchivo.xhtml"
+                                                            >
+                                                    <ui:param name="paramElemento" value="#{data.adjunto}"/>
+                                                </ui:include>
+                                                <br/>
+                                                <h:outputText value="#{data.adjunto.nombre}" 
+                                                              styleClass="label label-default"/>                            
+                                                <br/>
+                                                <p:commandLink styleClass="btn btn-warning glyphicon glyphicon-eye-open" 
+                                                               title="Ver archivo"/> 
+                                                
+                                                <p:commandLink styleClass="btn btn-default glyphicon glyphicon-download-alt"
+                                                               title="Descargar archivo"
+                                                               />
+
+                                            </div>
+                                        </ui:fragment>
+                                    </p:column>
+
+                                    <p:column headerText="Gerencia">
+                                        <h:outputText value="#{data.gerencia.nombre}" >
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="Aprueba">
+                                        <h:outputText value="#{data.gerencia.usuarioGerente.nombre}" >
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="Descripción">
+                                        <h:outputText value="#{data.descripcion}" />                                                    
+                                    </p:column>
+
+                                </p:dataTable>
+                            </h:form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
 
         </ui:composition>
 

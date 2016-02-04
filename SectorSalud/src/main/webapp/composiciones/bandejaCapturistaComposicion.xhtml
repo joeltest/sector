@@ -11,7 +11,6 @@
         <ui:composition >
 
             <h:form id="contenido"> 
-                capturista
                 <p:messages showSummary="true" showDetail="false" showIcon="true" closable="true"/>
                 <p:dataTable var="data" value="#{formatoBean.listaFormato}" rows="10"
                              paginator="true"
@@ -31,8 +30,14 @@
                             </p:commandLink>
                         </ui:fragment>
                         <ui:fragment rendered="#{not empty data.adjunto}">
-                            <ui:include src="../imgTipoArchivo.xhtml"/>
-                            <h:commandLink value="quitar"></h:commandLink>
+                            <ui:include src="../imgTipoArchivo.xhtml">
+                                <ui:param name="paramElemento" value="#{data.adjunto}"/>
+                            </ui:include>
+                            <h:commandLink value="Quitar #{data.adjunto.nombre}"
+                                           actionListener="#{formatoBean.eliminarArchivo}"
+                                           >
+                                <f:param name="idFormato" value="#{data.id}"/>
+                            </h:commandLink>
                             
                         </ui:fragment>
                     </p:column>
@@ -63,6 +68,15 @@
                         <h:outputText value="#{data.comentarios}"/>
                     </p:column>
 
+                    <p:column >
+                        <p:commandLink value="Eliminar"
+                                       styleClass="btn btn-danger"
+                                       actionListener="#{formatoBean.eliminarRegistro(e)}"
+                                       ajax="false"
+                                       >
+                            <f:param name="idFormato" value="#{data.id}"/>
+                        </p:commandLink> 
+                    </p:column>
                     <p:column >
                         <p:commandLink value="Enviar>>"
                                        styleClass="btn btn-success"
@@ -113,8 +127,7 @@
                         <p:commandLink value="Guardar"
                                        actionListener="#{formatoBean.guardarRegistroFormato(event)}"
                                        styleClass="btn btn-primary btn-lg"
-                                       update=":contenido"                                           
-                                       process="@form,:contenido"
+                                       ajax="false"
                                        oncomplete="PF('popupCrud').hide();"
                                        />     
                         <p:commandLink  

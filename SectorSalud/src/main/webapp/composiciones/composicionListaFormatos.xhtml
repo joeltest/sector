@@ -9,8 +9,8 @@
     <body>
 
         <ui:composition>
-            
-            
+
+
 
             <p:dataTable var="data" value="#{listaFormatoParam}" rows="10"
                          paginator="true"
@@ -27,7 +27,22 @@
                         </p:commandLink>
                     </ui:fragment>
                     <ui:fragment rendered="#{not empty data.adjunto}">
-                        <ui:include src="../imgTipoArchivo.xhtml"/>
+                        <div class="text-center">
+                            <ui:include src="../imgTipoArchivo.xhtml"
+                                        >
+                                <ui:param name="paramElemento" value="#{data.adjunto}"/>
+                            </ui:include>
+                            <br/>
+                            <h:outputText value="#{data.adjunto.nombre}" 
+                                          styleClass="label label-default"/>                            
+                            <br/>
+                            <p:commandLink styleClass="btn btn-warning glyphicon glyphicon-eye-open" 
+                                           title="Ver archivo"/>                                
+                            <p:commandLink styleClass="btn btn-default glyphicon glyphicon-download-alt"
+                                           title="Descargar archivo"
+                                           />
+
+                        </div>
                     </ui:fragment>
                 </p:column>
 
@@ -52,7 +67,7 @@
                     <h:outputText value="#{data.comentarios}"/>
                 </p:column>
                 <ui:insert name="columnas">
-                    
+
                 </ui:insert>               
             </p:dataTable>
 

@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition >
+
+            <h:form >    
+                <p:dataTable var="data" value="#{listaParam}" rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
+
+                    <p:column headerText="Archivo">
+                        
+                         <ui:fragment rendered="#{not empty data.adjunto}">
+                        <div class="text-center">
+                            <ui:include src="../imgTipoArchivo.xhtml"
+                                        >
+                                <ui:param name="paramElemento" value="#{data.adjunto}"/>
+                            </ui:include>
+                            <br/>
+                            <h:outputText value="#{data.adjunto.nombre}" 
+                                          styleClass="label label-default"/>                            
+                            <br/>
+                            <p:commandLink styleClass="btn btn-warning glyphicon glyphicon-eye-open" 
+                                           title="Ver archivo"/>                                
+                            <p:commandLink styleClass="btn btn-default glyphicon glyphicon-download-alt"
+                                           title="Descargar archivo"
+                                           />
+
+                        </div>
+                    </ui:fragment>
+                    </p:column>
+
+                    <p:column headerText="Gerencia">
+                        <h:outputText value="#{data.gerenciaAprueba.nombre}" >
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Aprueba">
+                        <h:outputText value="#{data.usuarioAprueba.nombre}" >
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Fecha captura">
+                        <h:outputText value="#{data.fechaGenero}" >
+                            <f:convertDateTime dateStyle="short" type="date"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Hora captura">
+                        <h:outputText value="#{data.horaGenero}" >
+                            <f:convertDateTime dateStyle="short" type="time"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="comentarios">
+                        <h:outputText value="#{data.comentarios}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+        </ui:composition>
+
+    </body>
+</html>

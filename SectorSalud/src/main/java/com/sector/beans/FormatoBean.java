@@ -49,6 +49,8 @@ public class FormatoBean implements Serializable {
     private AdjuntoFacadeLocal adjuntoService;
 
     private List<Formato> listaFormato;
+    private List<Formato> listaFormatosEnviados;
+    private List<Formato> listaFormatoDevueltos;
     private Formato elementoSeleccionado;
 
     private List<SelectItem> listaGerenciaItems;
@@ -68,6 +70,8 @@ public class FormatoBean implements Serializable {
 
     private void cargarLista() {
         setListaFormato(formatoService.obteberListaFormatos(EstatusEnum.CAPTURADO.getId(), getSesion().getUsuarioSesion().getId()));
+        this.listaFormatoDevueltos = formatoService.obteberListaFormatos(EstatusEnum.DEVUELTO.getId(), sesion.getUsuarioSesion().getId());
+        this.listaFormatosEnviados = formatoService.obteberListaFormatos(EstatusEnum.ENVIADO_PARA_VALIDACION.getId(), sesion.getUsuarioSesion().getId());
     }
 
     public void preprarNuevo(ActionEvent event) {
@@ -79,39 +83,54 @@ public class FormatoBean implements Serializable {
         cargarGerenciasCombo();
 
     }
-    
-    public void preparaAdjuntarArchivo(ActionEvent ev){
+
+    public void preparaAdjuntarArchivo(ActionEvent ev) {
         System.out.println("Preparar nuevo formato");
-         int idFormato = Integer.parseInt(FacesUtils.getRequestParameter("idFormato"));
+        int idFormato = Integer.parseInt(FacesUtils.getRequestParameter("idFormato"));
         System.out.println("id formato");
         this.elementoSeleccionado = formatoService.find(idFormato);
-        
     }
 
-    public void guardarAdjunto(){
+    public void guardarAdjunto() {
         adjuntoService.create(adjunto);
-         elementoSeleccionado.setAdjunto(adjunto);
+        elementoSeleccionado.setAdjunto(adjunto);
         formatoService.edit(elementoSeleccionado);
         cargarLista();
     }
-    
-    public void enviar(ActionEvent e){
+
+    public void enviar(ActionEvent e) {
         int idFormato = Integer.parseInt(FacesUtils.getRequestParameter("idFormato"));
-        
+
         this.elementoSeleccionado = formatoService.find(idFormato);
-        
+
         elementoSeleccionado.setEstatus(new Estatus(EstatusEnum.ENVIADO_PARA_VALIDACION.getId()));
         elementoSeleccionado.setFechaEnvio(new Date());
-        elementoSeleccionado.setHoraEnvio(new Date());               
+        elementoSeleccionado.setHoraEnvio(new Date());
         formatoService.edit(elementoSeleccionado);
         SendMail.enviarCorreoEnvioFormatoValidacion(elementoSeleccionado);
         cargarLista();
         //enviar por correo
-        FacesUtils.addInfoMessage("Se envio el formato para su validación "+elementoSeleccionado.getGerenciaAprueba().getNombre()+" "+elementoSeleccionado.getUsuarioAprueba().getNombre());
-        
+        FacesUtils.addInfoMessage("Se envio el formato para su validación " + elementoSeleccionado.getGerenciaAprueba().getNombre() + " " + elementoSeleccionado.getUsuarioAprueba().getNombre());
+
     }
-    
-    
+
+    public void eliminarRegistro(ActionEvent e) {
+
+        int idFormato = Integer.parseInt(FacesUtils.getRequestParameter("idFormato"));
+
+        this.elementoSeleccionado = formatoService.find(idFormato);
+        if (elementoSeleccionado.getAdjunto() != null) {
+            eliminarArchivo(e);
+        }
+        elementoSeleccionado.setEliminado("True");
+        formatoService.remove(elementoSeleccionado);
+        
+        cargarLista();
+
+        FacesUtils.addInfoMessage("Se elimino el formato... ");
+
+    }
+
     public void guardarRegistroFormato(ActionEvent event) {
 
         Gerencia gerencia = gerenciaService.find(idGerenciaSeleccionado);
@@ -138,28 +157,31 @@ public class FormatoBean implements Serializable {
     }
 
 //
-//    public void eliminarArchivo(ActionEvent event) {
-//        System.out.println("eliminarArchivo " + elementoSeleccionado.getRuta());
-//        File fichero = new File(elementoSeleccionado.getRuta());
-//        if (fichero.exists()) {
-//            if (fichero.delete()) {
-//                final Elemento elemento = elementoService.find(elementoSeleccionado.getId());
-//                elemento.setEliminado("True");
-//                elementoService.edit(elemento);
-//                System.out.println("Se elimino sin probolemas ");
-//                System.out.println("Cargar ca");
-//                cargarElementoParaDetalle(carpetaSeleccionada);
-//                FacesUtils.addInfoMessage("Se eliminó el archivo " + elemento.getNombre());
-//            } else {
-//                System.out.println("Existió un error al tratar de eliminar el archivo.. por favor contacte al administrador.");
-//                FacesUtils.addInfoMessage("Existió un error al tratar de eliminar el archivo.. por favor contacte al administrador..");
-//            }
-//        } else {
-//            FacesUtils.addInfoMessage("No existe el archivo.. por favor contacte al administrador..");
-//        }
-//
-//    }
-//
+    public void eliminarArchivo(ActionEvent event) {
+        final int id = Integer.parseInt(FacesUtils.getRequestParameter("idFormato"));
+
+        this.elementoSeleccionado = formatoService.find(id);
+
+        System.out.println("eliminarArchivo " + elementoSeleccionado.getAdjunto().getRuta());
+        Adjunto adjunto = elementoSeleccionado.getAdjunto();
+
+        File fichero = new File(adjunto.getRuta());
+        if (fichero.exists()) {
+            if (fichero.delete()) {
+                elementoSeleccionado.setAdjunto(null);
+                adjuntoService.remove(adjunto);
+                System.out.println("Se elimino sin probolemas ");
+                FacesUtils.addInfoMessage("Se eliminó el archivo " + adjunto.getNombre());
+            } else {
+                System.out.println("Existió un error al tratar de eliminar el archivo.. por favor contacte al administrador.");
+                FacesUtils.addInfoMessage("Existió un error al tratar de eliminar el archivo.. por favor contacte al administrador..");
+            }
+        } else {
+            FacesUtils.addInfoMessage("No existe el archivo.. por favor contacte al administrador..");
+        }
+
+    }
+
     public String crearFolder() {
         System.out.println("crearFolder");
 //        String nombreDirectorio = carpetaSeleccionada.getRuta()+folderDto.getNombre()+"\\";
@@ -190,7 +212,7 @@ public class FormatoBean implements Serializable {
 
             getAdjunto().setRuta(rutaCarpeta + "\\" + file.getFileName());
             copyFile(getAdjunto().getRuta(), event.getFile().getInputstream());
-            
+
             FacesUtils.addInfoMessage("Se adjunto el formato...");
             System.out.println("Se copio");
         } catch (IOException ex) {
@@ -221,6 +243,7 @@ public class FormatoBean implements Serializable {
             System.out.println(e.getMessage());
         }
     }
+
 //
 //    /* Compartir con */
 //    
@@ -401,7 +424,6 @@ public class FormatoBean implements Serializable {
 //    public void setListaUsuarioCompartidos(List<ComparteCon> listaUsuarioCompartidos) {
 //        this.listaUsuarioCompartidos = listaUsuarioCompartidos;
 //    }
-
     public Sesion getSesion() {
         return sesion;
     }
@@ -448,6 +470,22 @@ public class FormatoBean implements Serializable {
 
     public void setAdjunto(Adjunto adjunto) {
         this.adjunto = adjunto;
+    }
+
+    public List<Formato> getListaFormatosEnviados() {
+        return listaFormatosEnviados;
+    }
+
+    public void setListaFormatosEnviados(List<Formato> listaFormatosEnviados) {
+        this.listaFormatosEnviados = listaFormatosEnviados;
+    }
+
+    public List<Formato> getListaFormatoDevueltos() {
+        return listaFormatoDevueltos;
+    }
+
+    public void setListaFormatoDevueltos(List<Formato> listaFormatoDevueltos) {
+        this.listaFormatoDevueltos = listaFormatoDevueltos;
     }
 
 }

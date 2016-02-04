@@ -20,8 +20,8 @@
                      >                                        
                 </img>   
             </ui:fragment>
-            <ui:fragment rendered="#{paramElemento eq 'image/jpeg'}">
-                <img src="/SectorSalud/AbrirImage?URL=#{paramElemento.ruta}&amp;TYPE=#{paramElemento.tipoArchivo}"
+            <ui:fragment rendered="#{paramElemento.tipoArchivo eq 'image/jpeg'}">
+                <img width="70px" height="70px" src="/SectorSalud/AbrirImage?URL=#{paramElemento.ruta}&amp;TYPE=#{paramElemento.tipoArchivo}"
                        >                                       
                 </img>  
             </ui:fragment>            
